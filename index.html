@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIH Research: Social Media & the Teen Brain Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .option-btn:hover:not(:disabled) {
+            background-color: #f3f4f6;
+        }
+        .correct {
+            background-color: #dcfce7 !important;
+            border-color: #22c55e !important;
+            color: #166534 !important;
+        }
+        .incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen py-8 px-4">
+    <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <!-- Header -->
+        <div class="bg-blue-600 p-6 text-white text-center">
+            <h1 class="text-2xl font-bold">NIH Research Quiz</h1>
+            <p class="text-blue-100 mt-2">Social Media & the Teen Brain</p>
+        </div>
+
+        <!-- Quiz Progress -->
+        <div class="px-6 pt-6">
+            <div class="flex justify-between items-center mb-4 text-sm text-gray-500 font-medium">
+                <span id="question-number">Question 1 of 10</span>
+                <span id="score-display">Score: 0</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 10%"></div>
+            </div>
+        </div>
+
+        <!-- Question Container -->
+        <div id="quiz-container" class="p-6">
+            <div id="question-text" class="text-lg font-semibold text-gray-800 mb-6 leading-tight">
+                <!-- Question text will be injected here -->
+            </div>
+            <div id="options-container" class="space-y-3">
+                <!-- Options will be injected here -->
+            </div>
+            <div id="feedback" class="mt-6 p-4 rounded-xl hidden">
+                <!-- Feedback rationale will be injected here -->
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="p-6 border-t border-gray-100 flex justify-end">
+            <button id="next-btn" class="bg-blue-600 text-white px-8 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors hidden">
+                Next Question
+            </button>
+            <button id="restart-btn" class="bg-gray-800 text-white px-8 py-2 rounded-lg font-semibold hover:bg-gray-900 transition-colors hidden">
+                Restart Quiz
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "According to the research, what is the 'dose-response' relationship between social media use and depression risk in adolescents?",
+                options: [
+                    "A 5% increase in depression risk for every two hours spent online",
+                    "A 13% increase in depression risk for every additional hour spent online",
+                    "There is no measurable increase until after 5 hours of use",
+                    "Depression risk actually decreases after the first hour of social interaction"
+                ],
+                correct: 1,
+                rationale: "Correct. The research identified that each additional hour of daily social media use adds a 13% risk for depression symptoms."
+            },
+            {
+                question: "The article compares AI-driven algorithms to which substance to illustrate their potency and danger?",
+                options: ["Nicotine", "Caffeine", "Alcohol", "Fentanyl"],
+                correct: 3,
+                rationale: "Correct. Experts describe social media as 'digital heroin' and AI algorithms as the 'fentanyl' that makes it even more potent."
+            },
+            {
+                question: "What structural change is observed in the orbitofrontal cortex of those with smartphone addiction?",
+                options: [
+                    "Decreased gray matter volume",
+                    "Increased neural density",
+                    "Improved connectivity to the motor cortex",
+                    "Complete shut-down of the region"
+                ],
+                correct: 0,
+                rationale: "Correct. Addiction leads to a physical decrease in gray matter volume, affecting decision-making and impulse control."
+            },
+            {
+                question: "What is 'reduced reward sensitivity,' a hallmark of addiction mentioned in the study?",
+                options: [
+                    "The inability to understand when you have won a game",
+                    "A physical numbing of the fingertips from scrolling",
+                    "A decline in pleasure from natural, real-world rewards",
+                    "Being able to ignore notifications easily"
+                ],
+                correct: 2,
+                rationale: "Correct. The brain becomes so accustomed to high digital stimulation that normal life activities feel less satisfying."
+            },
+            {
+                question: "Which neurodevelopmental disorder is identified as a 'major predictor' of problematic internet use in the article?",
+                options: ["ADHD", "Dyslexia", "Autism Spectrum Disorder", "Down Syndrome"],
+                correct: 0,
+                rationale: "Correct. Individuals with ADHD are statistically more likely to struggle with social media addiction due to impulsivity."
+            },
+            {
+                question: "What percentage of teenagers aged 13 to 17 use at least one form of social media, according to the paper?",
+                options: ["50-55%", "75%", "93-97%", "100%"],
+                correct: 2,
+                rationale: "Correct. The research found that social media use is nearly universal, with 93-97% of all teenagers being active users."
+            },
+            {
+                question: "Which part of the brain is described as having 'increased emotional sensitivity' due to social media overuse?",
+                options: ["The Cerebellum", "The Amygdala", "The Brain Stem", "The Occipital Lobe"],
+                correct: 1,
+                rationale: "Correct. Overuse of social media affects the amygdala, making teenagers more emotionally reactive and sensitive to stress."
+            },
+            {
+                question: "In 2022, how much advertising revenue did US children (aged 0-17) generate for major social media platforms?",
+                options: ["$1 billion", "$500 million", "$50 billion", "$11 billion"],
+                correct: 3,
+                rationale: "Correct. US children generated $11 billion in ad revenue, creating a massive financial incentive for apps to keep them hooked."
+            },
+            {
+                question: "According to the research, what happens when dopamine is released during the 'seeking' phase of social media use?",
+                options: [
+                    "It makes the user feel satisfied and ready to stop",
+                    "It reinstates the 'desire' behavior, creating a loop",
+                    "It improves long-term memory of the content viewed",
+                    "It prevents the user from feeling any stress"
+                ],
+                correct: 1,
+                rationale: "Correct. Dopamine release during the anticipation of rewards reinforces the urge to keep checking for more."
+            },
+            {
+                question: "Which practical intervention does the article suggest for preventing social isolation and sleep issues?",
+                options: [
+                    "Disallowing screen time in bedrooms and during meals",
+                    "Charging kids a 'fee' for every hour of use",
+                    "Switching from video content to text-only content",
+                    "Providing more AI-filtered content"
+                ],
+                correct: 0,
+                rationale: "Correct. Keeping devices in shared spaces and setting 'no-screen' times like meals are key recommendations."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedback = document.getElementById('feedback');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const questionNumber = document.getElementById('question-number');
+        const scoreDisplay = document.getElementById('score-display');
+        const progressBar = document.getElementById('progress-bar');
+
+        function loadQuestion() {
+            answered = false;
+            const data = quizData[currentQuestion];
+            questionNumber.innerText = `Question ${currentQuestion + 1} of ${quizData.length}`;
+            progressBar.style.width = `${((currentQuestion + 1) / quizData.length) * 100}%`;
+            questionText.innerText = data.question;
+            feedback.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            
+            optionsContainer.innerHTML = '';
+            data.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.innerText = option;
+                btn.className = "option-btn w-full text-left p-4 rounded-xl border-2 border-gray-100 text-gray-700 transition-all font-medium focus:outline-none";
+                btn.onclick = () => handleAnswer(index);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(choice) {
+            if (answered) return;
+            answered = true;
+            
+            const data = quizData[currentQuestion];
+            const buttons = optionsContainer.getElementsByTagName('button');
+            
+            if (choice === data.correct) {
+                buttons[choice].classList.add('correct');
+                score++;
+                scoreDisplay.innerText = `Score: ${score}`;
+                feedback.className = "mt-6 p-4 rounded-xl bg-green-50 text-green-800 text-sm border border-green-100";
+            } else {
+                buttons[choice].classList.add('incorrect');
+                buttons[data.correct].classList.add('correct');
+                feedback.className = "mt-6 p-4 rounded-xl bg-red-50 text-red-800 text-sm border border-red-100";
+            }
+            
+            feedback.innerText = data.rationale;
+            feedback.classList.remove('hidden');
+            
+            if (currentQuestion < quizData.length - 1) {
+                nextBtn.classList.remove('hidden');
+            } else {
+                showFinalResults();
+            }
+        }
+
+        function showFinalResults() {
+            setTimeout(() => {
+                questionText.innerText = "Quiz Completed!";
+                optionsContainer.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-5xl font-bold text-blue-600 mb-2">${Math.round((score/quizData.length)*100)}%</div>
+                        <p class="text-gray-600">You scored ${score} out of ${quizData.length} correctly.</p>
+                    </div>
+                `;
+                feedback.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+                restartBtn.classList.remove('hidden');
+            }, 1000);
+        }
+
+        nextBtn.onclick = () => {
+            currentQuestion++;
+            loadQuestion();
+        };
+
+        restartBtn.onclick = () => {
+            currentQuestion = 0;
+            score = 0;
+            scoreDisplay.innerText = "Score: 0";
+            restartBtn.classList.add('hidden');
+            loadQuestion();
+        };
+
+        // Initial Load
+        loadQuestion();
+    </script>
+</body>
+</html>
